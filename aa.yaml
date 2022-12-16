@@ -1,0 +1,427 @@
+openapi: 3.0.3
+info:
+  version: '1.0'
+  title: Outbound Email
+  description: 'API for sending an Outbound Email message '
+  contact:
+    name: Applied Platform Team
+    url: '#platform'
+servers:
+  - url: 'https://@API-HOST-NAME@/outbound-email/v1'
+tags:
+  - name: outbound-email
+paths:
+  /outbound-email:
+    post:
+      x-codegen-request-body-name: body
+      tags:
+        - outbound-email
+      summary: Create Outbound Email
+      description: |-
+        Create Outbound Email for a given tenant and email address. If an email account is known, prefer using /accounts/{account-id}/send 
+        If the email account is not known, it will be provisioned with this call.
+      operationId: create-outbound-email
+      security:
+        - bearerTokenHeader:
+            - 'create:outbound-email'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OutboundEmail'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/OutboundEmail'
+        description: ''
+      responses:
+        '202':
+          description: queued
+          headers:
+            location:
+              schema:
+                type: string
+            retry-after:
+              schema:
+                type: integer
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      parameters:
+        - $ref: '#/components/parameters/ClientCorrelationId'
+        - $ref: '#/components/parameters/CultureCode'
+  '/outbound-email/{id}':
+    delete:
+      tags:
+        - outbound-email
+      summary: Delete Outbound Email
+      description: Delete Outbound Email
+      operationId: delete-outbound-email
+      security:
+        - bearerTokenHeader:
+            - 'delete:outbound-email'
+      parameters:
+        - name: id
+          in: path
+          description: id of outbound email
+          required: true
+          schema:
+            type: string
+            pattern: .*
+            minLength: 36
+            maxLength: 36
+        - $ref: '#/components/parameters/ClientCorrelationId'
+        - $ref: '#/components/parameters/CultureCode'
+      responses:
+        '204':
+          description: Deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - outbound-email
+      summary: Get Outbound Email Detail
+      description: Get Outbound Email Detail
+      operationId: get-outbound-email
+      security:
+        - bearerTokenHeader:
+            - 'read:outbound-email'
+      parameters:
+        - name: id
+          in: path
+          description: id of outbound email
+          required: true
+          schema:
+            type: string
+            pattern: .*
+            minLength: 36
+            maxLength: 36
+        - $ref: '#/components/parameters/ClientCorrelationId'
+        - $ref: '#/components/parameters/CultureCode'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OutboundEmail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  '/outbound-email/queue/{id}/status':
+    get:
+      tags:
+        - outbound-email
+      summary: Get Outbound Email Status
+      description: Get Outbound Email Status
+      operationId: get-outbound-email-status
+      security:
+        - bearerTokenHeader:
+            - 'read:outbound-email'
+      parameters:
+        - name: id
+          in: path
+          description: id of outbound email queue item
+          required: true
+          schema:
+            type: string
+            pattern: .*
+            minLength: 36
+            maxLength: 36
+        - $ref: '#/components/parameters/ClientCorrelationId'
+        - $ref: '#/components/parameters/CultureCode'
+      responses:
+        '200':
+          description: Pending
+        '303':
+          description: complete
+          headers:
+            location:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    OutboundEmail:
+      type: object
+      description: Expected Outbound Email Response
+      x-examples:
+        Example 1:
+          $ref: '#/components/examples/ValidOutboundEmailExample'
+      properties:
+        id:
+          description: Identifier for the Outbound Email
+          type: string
+        tenant:
+          description: Identifier for the Tenant to associate to the Email Account
+          type: string
+        sender-email:
+          description: Sender Email to associate to the Email Account
+          type: string
+        subject:
+          description: Subject of outbound email
+          type: string
+        reply-to-email:
+          description: Email for Reply To responses
+          type: string
+        sender-name:
+          description: Sender Fullname of outbound email
+          type: string
+        recipients:
+          description: Recipients of email
+          type: array
+          items: {}
+        cc:
+          description: Recipients of email
+          type: array
+          items: {}
+        bcc:
+          description: Recipients of email
+          type: array
+          items: {}
+        files:
+          description: File attachments
+          type: array
+          items:
+            $ref: '#/components/schemas/Attachment'
+        filesUrl:
+          description: Url from which to access files
+          type: string
+        sent:
+          description: Date time outbound email was sent
+          type: string
+          format: date-time
+        status:
+          description: Status of Outbound Email
+          type: string
+      required:
+        - account
+        - subject
+        - replyToEmail
+        - senderName
+        - recipients
+    Attachment:
+      type: object
+      description: File attachments
+      properties:
+        filename:
+          description: Filename
+          type: string
+        mediatype:
+          description: 'The media template type as assigned by https://www.iana.org/assignments/media-types/ per RFC2046'
+          type: string
+      required:
+        - filename
+        - mediatype
+    Error:
+      type: object
+      title: ''
+      readOnly: true
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        traceId:
+          type: string
+        additionalDetails:
+          type: array
+          items:
+            type: object
+  responses:
+    BadRequest:
+      description: Example response
+      headers:
+        Asi-Trace-Id:
+          $ref: '#/components/headers/Asi-Trace-Id'
+        Asi-Client-Correlation-Id:
+          $ref: '#/components/headers/Asi-Client-Correlation-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            badRequestExample:
+              value:
+                type: 'https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1'
+                title: Bad Request
+                status: 400
+                detail: One or more arguments are invalid
+                instance: 'https://@API-HOST-NAME@/namespace/v1/sample-resources/000'
+                traceId: '1234567890123456789'
+    Unauthorized:
+      description: Unauthorized
+      headers:
+        Asi-Trace-Id:
+          $ref: '#/components/headers/Asi-Trace-Id'
+        Asi-Client-Correlation-Id:
+          $ref: '#/components/headers/Asi-Client-Correlation-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            unauthorizedExample:
+              value:
+                Error:
+                  type: 'https://datatracker.ietf.org/doc/html/rfc7235#section-3.1'
+                  title: Unauthorized
+                  status: 401
+                  detail: You are not authorized to access this resource
+                  instance: 'https://@API-HOST-NAME@/namespace/v1/sample-resources'
+                  traceId: '1234567890123456789'
+    Forbidden:
+      description: Forbidden
+      headers:
+        Asi-Trace-Id:
+          $ref: '#/components/headers/Asi-Trace-Id'
+        Asi-Client-Correlation-Id:
+          $ref: '#/components/headers/Asi-Client-Correlation-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            forbiddenExample:
+              value:
+                Error:
+                  type: 'https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.3'
+                  title: Forbidden
+                  status: 403
+                  detail: You are forbidden to access this resource
+                  instance: 'https://@API-HOST-NAME@/namespace/v1/sample-resources'
+                  traceId: '1234567890123456789'
+    NotFound:
+      description: Not Found
+      headers:
+        Asi-Trace-Id:
+          $ref: '#/components/headers/Asi-Trace-Id'
+        Asi-Client-Correlation-Id:
+          $ref: '#/components/headers/Asi-Client-Correlation-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            notFoundExample:
+              value:
+                Error:
+                  type: 'https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4'
+                  title: Not Found
+                  status: 404
+                  detail: The specified resource was not found
+                  instance: 'https://@API-HOST-NAME@/namespace/v1/sample-resources'
+                  traceId: '1234567890123456789'
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        Asi-Trace-Id:
+          $ref: '#/components/headers/Asi-Trace-Id'
+        Asi-Client-Correlation-Id:
+          $ref: '#/components/headers/Asi-Client-Correlation-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            notFoundExample:
+              value:
+                Error:
+                  type: 'https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.1'
+                  title: Internal Server Error
+                  status: 500
+                  instance: 'https://@API-HOST-NAME@/namespace/v1/sample-resources'
+                  traceId: '1234567890123456789'
+  headers:
+    Asi-Trace-Id:
+      description: Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.
+      schema:
+        type: string
+    Asi-Client-Correlation-Id:
+      description: Caller supplied header containing an identifier used to correlate the logs generated during a workflow.
+      schema:
+        type: string
+  parameters:
+    ClientCorrelationId:
+      name: Asi-Client-Correlation-Id
+      description: Caller supplied header containing an identifier used to correlate the logs generated during a workflow.
+      in: header
+      schema:
+        type: string
+    CultureCode:
+      name: Accept-Language
+      in: header
+      description: Designates the target culture to return descriptions in. (ie. EN-US)
+      schema:
+        type: string
+        enum:
+          - EN_US
+          - EN_CA
+          - FR_CA
+          - EN_UK
+  examples:
+    ValidOutboundEmailExample:
+      value:
+        id: 7e8f746f-54bf-433e-b00f-55fc97bfa090
+        account: 8a8f746f-54bf-433e-b00f-55fc97bfa090
+        subject: Thanks for purchasing
+        replyToEmail: jim@myagency.com
+        senderName: Jim Boss
+        recipients:
+          - sammy@notgmail.com
+        cc:
+          - sammyhome@notgmail.com
+        bcc:
+          - jim@myagency.com
+        sent: '2021-12-19T16:39:57-08:00'
+        status: Processed
+        files: {}
+        filesUrl: 'https://storage.googleapis.com/example-bucket/cat.jpeg?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=example%40example-project.iam.gserviceaccount.com%2F20181026%2Fus-central1%2Fstorage%2Fgoog4_request&X-Goog-Date=20181026T181309Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=247a2aa45f169edf4d187d54e7cc46e4731b1e6273242c4f4c39a1d2507a0e58706e25e3a85a7dbb891d62afa8496def8e260c1db863d9ace85ff0a184b894b117fe46d1225c82f2aa19efd52cf21d3e2022b3b868dcc1aca2741951ed5bf3bb25a34f5e9316a2841e8ff4c530b22ceaa1c5ce09c7cbb5732631510c20580e61723f5594de3aea497f195456a2ff2bdd0d13bad47289d8611b6f9cfeef0c46c91a455b94e90a66924f722292d21e24d31dcfb38ce0c0f353ffa5a9756fc2a9f2b40bc2113206a81e324fc4fd6823a29163fa845c8ae7eca1fcf6e5bb48b3200983c56c5ca81fffb151cca7402beddfc4a76b133447032ea7abedc098d2eb14a7'
+  securitySchemes:
+    bearerTokenHeader:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: 'https://@API-HOST-NAME@/v1/auth/connect/token'
+          scopes:
+            'read:outbound-email': read outbound email
+            'delete:outbound-email': delete outbound email
+            'create:outbound-email': delete outbound email
