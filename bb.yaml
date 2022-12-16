@@ -1,0 +1,858 @@
+{
+  "info": {
+    "version": "1.0",
+    "title": "Outbound Email",
+    "description": "API for sending an Outbound Email message ",
+    "contact": {
+      "name": "Applied Platform Team",
+      "url": "#platform"
+    }
+  },
+  "tags": [
+    {
+      "name": "outbound-email"
+    }
+  ],
+  "paths": {
+    "/outbound-email": {
+      "post": {
+        "x-codegen-request-body-name": "body",
+        "tags": [
+          "outbound-email"
+        ],
+        "summary": "Create Outbound Email",
+        "description": "Create Outbound Email for a given tenant and email address. If an email account is known, prefer using /accounts/{account-id}/send \nIf the email account is not known, it will be provisioned with this call.",
+        "operationId": "create-outbound-email",
+        "security": [
+          {
+            "bearerTokenHeader": [
+              "create:outbound-email"
+            ]
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "queued",
+            "headers": {
+              "location": {
+                "type": "string"
+              },
+              "retry-after": {
+                "type": "integer"
+              }
+            }
+          },
+          "400": {
+            "description": "Example response",
+            "headers": {
+              "Asi-Trace-Id": {
+                "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              },
+              "Asi-Client-Correlation-Id": {
+                "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Asi-Trace-Id": {
+                "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              },
+              "Asi-Client-Correlation-Id": {
+                "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "Asi-Trace-Id": {
+                "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              },
+              "Asi-Client-Correlation-Id": {
+                "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {
+              "Asi-Trace-Id": {
+                "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              },
+              "Asi-Client-Correlation-Id": {
+                "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {
+              "Asi-Trace-Id": {
+                "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              },
+              "Asi-Client-Correlation-Id": {
+                "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Asi-Client-Correlation-Id",
+            "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Designates the target culture to return descriptions in. (ie. EN-US)",
+            "enum": [
+              "EN_US",
+              "EN_CA",
+              "FR_CA",
+              "EN_UK"
+            ],
+            "type": "string"
+          },
+          {
+            "description": "",
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/OutboundEmail"
+            }
+          }
+        ],
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/problem+json"
+        ]
+      }
+    },
+    "/outbound-email/{id}": {
+      "delete": {
+        "tags": [
+          "outbound-email"
+        ],
+        "summary": "Delete Outbound Email",
+        "description": "Delete Outbound Email",
+        "operationId": "delete-outbound-email",
+        "security": [
+          {
+            "bearerTokenHeader": [
+              "delete:outbound-email"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id of outbound email",
+            "required": true,
+            "minLength": 36,
+            "maxLength": 36,
+            "pattern": ".*",
+            "type": "string"
+          },
+          {
+            "name": "Asi-Client-Correlation-Id",
+            "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Designates the target culture to return descriptions in. (ie. EN-US)",
+            "enum": [
+              "EN_US",
+              "EN_CA",
+              "FR_CA",
+              "EN_UK"
+            ],
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "400": {
+            "description": "Example response",
+            "headers": {
+              "Asi-Trace-Id": {
+                "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              },
+              "Asi-Client-Correlation-Id": {
+                "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Asi-Trace-Id": {
+                "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              },
+              "Asi-Client-Correlation-Id": {
+                "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "Asi-Trace-Id": {
+                "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              },
+              "Asi-Client-Correlation-Id": {
+                "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {
+              "Asi-Trace-Id": {
+                "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              },
+              "Asi-Client-Correlation-Id": {
+                "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {
+              "Asi-Trace-Id": {
+                "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              },
+              "Asi-Client-Correlation-Id": {
+                "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "outbound-email"
+        ],
+        "summary": "Get Outbound Email Detail",
+        "description": "Get Outbound Email Detail",
+        "operationId": "get-outbound-email",
+        "security": [
+          {
+            "bearerTokenHeader": [
+              "read:outbound-email"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id of outbound email",
+            "required": true,
+            "minLength": 36,
+            "maxLength": 36,
+            "pattern": ".*",
+            "type": "string"
+          },
+          {
+            "name": "Asi-Client-Correlation-Id",
+            "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Designates the target culture to return descriptions in. (ie. EN-US)",
+            "enum": [
+              "EN_US",
+              "EN_CA",
+              "FR_CA",
+              "EN_UK"
+            ],
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/OutboundEmail"
+            }
+          },
+          "400": {
+            "description": "Example response",
+            "headers": {
+              "Asi-Trace-Id": {
+                "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              },
+              "Asi-Client-Correlation-Id": {
+                "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Asi-Trace-Id": {
+                "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              },
+              "Asi-Client-Correlation-Id": {
+                "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "Asi-Trace-Id": {
+                "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              },
+              "Asi-Client-Correlation-Id": {
+                "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {
+              "Asi-Trace-Id": {
+                "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              },
+              "Asi-Client-Correlation-Id": {
+                "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {
+              "Asi-Trace-Id": {
+                "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              },
+              "Asi-Client-Correlation-Id": {
+                "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/outbound-email/queue/{id}/status": {
+      "get": {
+        "tags": [
+          "outbound-email"
+        ],
+        "summary": "Get Outbound Email Status",
+        "description": "Get Outbound Email Status",
+        "operationId": "get-outbound-email-status",
+        "security": [
+          {
+            "bearerTokenHeader": [
+              "read:outbound-email"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id of outbound email queue item",
+            "required": true,
+            "minLength": 36,
+            "maxLength": 36,
+            "pattern": ".*",
+            "type": "string"
+          },
+          {
+            "name": "Asi-Client-Correlation-Id",
+            "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Designates the target culture to return descriptions in. (ie. EN-US)",
+            "enum": [
+              "EN_US",
+              "EN_CA",
+              "FR_CA",
+              "EN_UK"
+            ],
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pending"
+          },
+          "303": {
+            "description": "complete",
+            "headers": {
+              "location": {
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "description": "Example response",
+            "headers": {
+              "Asi-Trace-Id": {
+                "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              },
+              "Asi-Client-Correlation-Id": {
+                "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Asi-Trace-Id": {
+                "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              },
+              "Asi-Client-Correlation-Id": {
+                "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "headers": {
+              "Asi-Trace-Id": {
+                "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              },
+              "Asi-Client-Correlation-Id": {
+                "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "headers": {
+              "Asi-Trace-Id": {
+                "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              },
+              "Asi-Client-Correlation-Id": {
+                "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "headers": {
+              "Asi-Trace-Id": {
+                "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              },
+              "Asi-Client-Correlation-Id": {
+                "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "swagger": "2.0",
+  "host": "",
+  "schemes": [
+    "https"
+  ],
+  "basePath": "/outbound-email/v1",
+  "definitions": {
+    "OutboundEmail": {
+      "type": "object",
+      "description": "Expected Outbound Email Response",
+      "x-examples": {
+        "Example 1": {
+          "$ref": "#/x-components/examples/ValidOutboundEmailExample"
+        }
+      },
+      "properties": {
+        "id": {
+          "description": "Identifier for the Outbound Email",
+          "type": "string"
+        },
+        "tenant": {
+          "description": "Identifier for the Tenant to associate to the Email Account",
+          "type": "string"
+        },
+        "sender-email": {
+          "description": "Sender Email to associate to the Email Account",
+          "type": "string"
+        },
+        "subject": {
+          "description": "Subject of outbound email",
+          "type": "string"
+        },
+        "reply-to-email": {
+          "description": "Email for Reply To responses",
+          "type": "string"
+        },
+        "sender-name": {
+          "description": "Sender Fullname of outbound email",
+          "type": "string"
+        },
+        "recipients": {
+          "description": "Recipients of email",
+          "type": "array",
+          "items": {}
+        },
+        "cc": {
+          "description": "Recipients of email",
+          "type": "array",
+          "items": {}
+        },
+        "bcc": {
+          "description": "Recipients of email",
+          "type": "array",
+          "items": {}
+        },
+        "files": {
+          "description": "File attachments",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Attachment"
+          }
+        },
+        "filesUrl": {
+          "description": "Url from which to access files",
+          "type": "string"
+        },
+        "sent": {
+          "description": "Date time outbound email was sent",
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "description": "Status of Outbound Email",
+          "type": "string"
+        }
+      },
+      "required": [
+        "account",
+        "subject",
+        "replyToEmail",
+        "senderName",
+        "recipients"
+      ]
+    },
+    "Attachment": {
+      "type": "object",
+      "description": "File attachments",
+      "properties": {
+        "filename": {
+          "description": "Filename",
+          "type": "string"
+        },
+        "mediatype": {
+          "description": "The media template type as assigned by https://www.iana.org/assignments/media-types/ per RFC2046",
+          "type": "string"
+        }
+      },
+      "required": [
+        "filename",
+        "mediatype"
+      ]
+    },
+    "Error": {
+      "type": "object",
+      "title": "",
+      "readOnly": true,
+      "properties": {
+        "type": {
+          "type": "string",
+          "format": "uri"
+        },
+        "title": {
+          "type": "string"
+        },
+        "status": {
+          "type": "integer"
+        },
+        "detail": {
+          "type": "string"
+        },
+        "instance": {
+          "type": "string",
+          "format": "uri"
+        },
+        "traceId": {
+          "type": "string"
+        },
+        "additionalDetails": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "bearerTokenHeader": {
+      "type": "oauth2",
+      "flow": "application",
+      "tokenUrl": "https://@API-HOST-NAME@/v1/auth/connect/token",
+      "scopes": {
+        "read:outbound-email": "read outbound email",
+        "delete:outbound-email": "delete outbound email",
+        "create:outbound-email": "delete outbound email"
+      }
+    }
+  },
+  "x-components": {
+    "responses": {
+      "BadRequest": {
+        "description": "Example response",
+        "headers": {
+          "Asi-Trace-Id": {
+            "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+            "type": "string"
+          },
+          "Asi-Client-Correlation-Id": {
+            "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+            "type": "string"
+          }
+        },
+        "schema": {
+          "$ref": "#/definitions/Error"
+        }
+      },
+      "Unauthorized": {
+        "description": "Unauthorized",
+        "headers": {
+          "Asi-Trace-Id": {
+            "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+            "type": "string"
+          },
+          "Asi-Client-Correlation-Id": {
+            "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+            "type": "string"
+          }
+        },
+        "schema": {
+          "$ref": "#/definitions/Error"
+        }
+      },
+      "Forbidden": {
+        "description": "Forbidden",
+        "headers": {
+          "Asi-Trace-Id": {
+            "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+            "type": "string"
+          },
+          "Asi-Client-Correlation-Id": {
+            "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+            "type": "string"
+          }
+        },
+        "schema": {
+          "$ref": "#/definitions/Error"
+        }
+      },
+      "NotFound": {
+        "description": "Not Found",
+        "headers": {
+          "Asi-Trace-Id": {
+            "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+            "type": "string"
+          },
+          "Asi-Client-Correlation-Id": {
+            "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+            "type": "string"
+          }
+        },
+        "schema": {
+          "$ref": "#/definitions/Error"
+        }
+      },
+      "InternalServerError": {
+        "description": "Internal Server Error",
+        "headers": {
+          "Asi-Trace-Id": {
+            "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+            "type": "string"
+          },
+          "Asi-Client-Correlation-Id": {
+            "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+            "type": "string"
+          }
+        },
+        "schema": {
+          "$ref": "#/definitions/Error"
+        }
+      }
+    },
+    "headers": {
+      "Asi-Trace-Id": {
+        "description": "Applied generated header containing a unique identifier used to correlate the logs generated during a workflow.",
+        "type": "string"
+      },
+      "Asi-Client-Correlation-Id": {
+        "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+        "type": "string"
+      }
+    },
+    "parameters": {
+      "ClientCorrelationId": {
+        "name": "Asi-Client-Correlation-Id",
+        "description": "Caller supplied header containing an identifier used to correlate the logs generated during a workflow.",
+        "in": "header",
+        "type": "string"
+      },
+      "CultureCode": {
+        "name": "Accept-Language",
+        "in": "header",
+        "description": "Designates the target culture to return descriptions in. (ie. EN-US)",
+        "enum": [
+          "EN_US",
+          "EN_CA",
+          "FR_CA",
+          "EN_UK"
+        ],
+        "type": "string"
+      }
+    },
+    "examples": {
+      "ValidOutboundEmailExample": {
+        "value": {
+          "id": "7e8f746f-54bf-433e-b00f-55fc97bfa090",
+          "account": "8a8f746f-54bf-433e-b00f-55fc97bfa090",
+          "subject": "Thanks for purchasing",
+          "replyToEmail": "jim@myagency.com",
+          "senderName": "Jim Boss",
+          "recipients": [
+            "sammy@notgmail.com"
+          ],
+          "cc": [
+            "sammyhome@notgmail.com"
+          ],
+          "bcc": [
+            "jim@myagency.com"
+          ],
+          "sent": "2021-12-19T16:39:57-08:00",
+          "status": "Processed",
+          "files": {},
+          "filesUrl": "https://storage.googleapis.com/example-bucket/cat.jpeg?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=example%40example-project.iam.gserviceaccount.com%2F20181026%2Fus-central1%2Fstorage%2Fgoog4_request&X-Goog-Date=20181026T181309Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=247a2aa45f169edf4d187d54e7cc46e4731b1e6273242c4f4c39a1d2507a0e58706e25e3a85a7dbb891d62afa8496def8e260c1db863d9ace85ff0a184b894b117fe46d1225c82f2aa19efd52cf21d3e2022b3b868dcc1aca2741951ed5bf3bb25a34f5e9316a2841e8ff4c530b22ceaa1c5ce09c7cbb5732631510c20580e61723f5594de3aea497f195456a2ff2bdd0d13bad47289d8611b6f9cfeef0c46c91a455b94e90a66924f722292d21e24d31dcfb38ce0c0f353ffa5a9756fc2a9f2b40bc2113206a81e324fc4fd6823a29163fa845c8ae7eca1fcf6e5bb48b3200983c56c5ca81fffb151cca7402beddfc4a76b133447032ea7abedc098d2eb14a7"
+        }
+      }
+    }
+  }
+}
